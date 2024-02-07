@@ -1,0 +1,57 @@
+name: Test PHP
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+      - 'feature/**'
+
+jobs:
+  test-php:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-versions: ['8.1', '8.2', '8.3']
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+
+      - name: Install dependencies
+        run: composer install
+
+      - name: Check coding standards
+        run: composer lint
+
+      - name: Run tests
+        run: XDEBUG_MODE=coverage composer test
+
+      - name: Upload coverage report as an artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{github.job}}-code-coverage-report-${{ matrix.php-versions }}
+          path: .coverage-html
+
+      - name: Upload coverage report to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: cobertura.xml
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: drevops/drevops_installer
+
+      # Smoke test for PHAR.
+      - name: Build PHAR
+        run: composer build
+
+      - name: Test PHAR
+        run: ./.build/installer.phar --quiet || exit 1

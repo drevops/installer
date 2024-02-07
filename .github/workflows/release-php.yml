@@ -1,0 +1,78 @@
+name: Release PHP
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  release-php:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: /tmp/composer-cache
+          key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.1
+
+      - name: Install dependencies
+        run: composer install
+
+      - name: Add version
+        run: |
+          TAG=${{ github.ref_type == 'tag' && github.ref_name || '' }}
+          SHA=${{ github.ref_type == 'branch' && github.sha || '' }}
+          sed -i "s/\"git-tag-ci\": \"dev\"/\"git-tag-ci\": \"${TAG:-${SHA}}\"/g" box.json        
+
+      - name: Build PHAR
+        run: composer build
+
+      - name: Test PHAR
+        run: ./.build/installer.phar --quiet || exit 1
+
+      - name: Prepare publish artifact
+        run: |
+          mkdir -p /tmp/installer/docs
+          cp .build/installer.phar /tmp/installer/docs/index.html
+          echo "install.drevops.com" > /tmp/installer/docs/CNAME
+
+      - name: Setup SSH private key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.PUBLISH_SSH_PRIVATE_KEY }}
+
+      - name: Publish
+        run: |
+          DST_BRANCH=bin
+          git config --global user.name "Deployment robot"
+          git config --global user.email "deploy+installer@drevops.com"
+          cd /tmp/installer
+          git init
+          git checkout -b "${DST_BRANCH}"
+          git add -A
+          git commit -m "Automatically pushed from drevops/installer 'main' branch."
+          git remote add origin git@github.com:drevops/installer.git
+          git push origin "${DST_BRANCH}" --force
+
+      - name: Get tag name
+        if: github.ref_type == 'tag'
+        id: get-version
+        run: echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        if: github.ref_type == 'tag'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ./.build/installer.phar
