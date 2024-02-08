@@ -1,5 +1,5 @@
 {
-    "output": ".build/installer.phar",
+    "output": ".build/installer",
     "banner": [
         "@file",
         "DrevOps CLI installer.",

@@ -39,12 +39,12 @@ jobs:
         run: composer build
 
       - name: Test PHAR
-        run: ./.build/installer.phar --quiet || exit 1
+        run: ./.build/installer --quiet || exit 1
 
       - name: Prepare publish artifact
         run: |
           mkdir -p /tmp/installer/docs
-          cp .build/installer.phar /tmp/installer/docs/index.html
+          cp .build/installer /tmp/installer/docs/index.html
           echo "install.drevops.com" > /tmp/installer/docs/CNAME
 
       - name: Setup SSH private key
@@ -75,4 +75,4 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            ./.build/installer.phar
+            ./.build/installer
