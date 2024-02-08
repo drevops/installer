@@ -54,4 +54,4 @@ jobs:
         run: composer build
 
       - name: Test PHAR
-        run: ./.build/installer.phar --quiet || exit 1
+        run: ./.build/installer --quiet || exit 1
