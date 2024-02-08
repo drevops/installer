@@ -23,6 +23,9 @@
     <br>
 </p>
 
+> [!IMPORTANT]
+> We are working on the v2 on the installer in the [`2.x`](https://github.com/drevops/installer/tree/2.x) branch.
+
 ## Installation
 
 Download the latest version of the installer:
