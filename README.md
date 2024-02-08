@@ -9,7 +9,7 @@
 
 [![GitHub Issues](https://img.shields.io/github/issues/drevops/installer.svg)](https://github.com/drevops/installer/issues)
 [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/drevops/installer.svg)](https://github.com/drevops/installer/pulls)
-[![Test PHP](https://github.com/drevops/installer/actions/workflows/test-php.yml/badge.svg)](https://github.com/drevops/installer/actions/workflows/test-php.yml)
+[![Test PHP](https://github.com/drevops/installer/actions/workflows/test-php.yml/badge.svg?branch=2.x)](https://github.com/drevops/installer/actions/workflows/test-php.yml)
 [![codecov](https://codecov.io/gh/drevops/drevops_installer/graph/badge.svg?token=K9SPETWCJR)](https://codecov.io/gh/drevops/drevops_installer)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/drevops/installer)
 ![LICENSE](https://img.shields.io/github/license/drevops/installer)
