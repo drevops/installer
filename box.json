@@ -1,11 +1,12 @@
 {
     "output": ".build/installer",
+    "compression": "GZ",
     "banner": [
         "@file",
-        "DrevOps CLI installer.",
+        "DrevOps CLI Installer.",
         "",
         "<!-- -->",
-        "DrevOps CLI installer.<br/>",
+        "DrevOps CLI Installer.<br/>",
         "Run in your terminal:<br/>",
         "<code>curl -SsL https://install.drevops.com > install.php && php install.php; rm -r install.php</code><br/>",
         "More details: <a href=\"https://docs.drevops.com\">https://docs.drevops.com</a>",

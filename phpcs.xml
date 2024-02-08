@@ -25,8 +25,29 @@
         <exclude-pattern>*.test</exclude-pattern>
     </rule>
 
+    <!-- Allow long lines in tests. -->
+    <rule ref="Drupal.Files.LineLength.TooLong">
+        <exclude-pattern>*.Test\.php</exclude-pattern>
+        <exclude-pattern>*.TestCase\.php</exclude-pattern>
+        <exclude-pattern>*.test</exclude-pattern>
+    </rule>
+
     <!-- Allow long array lines in tests. -->
     <rule ref="Drupal.Arrays.Array.LongLineDeclaration">
+        <exclude-pattern>*.Test\.php</exclude-pattern>
+        <exclude-pattern>*.TestCase\.php</exclude-pattern>
+        <exclude-pattern>*.test</exclude-pattern>
+    </rule>
+
+    <!-- Allow no class descriptions in tests. -->
+    <rule ref="Drupal.Commenting.ClassComment.Missing">
+        <exclude-pattern>*.Test\.php</exclude-pattern>
+        <exclude-pattern>*.TestCase\.php</exclude-pattern>
+        <exclude-pattern>*.test</exclude-pattern>
+    </rule>
+
+    <!-- Allow no class short descriptions in tests. -->
+    <rule ref="Drupal.Commenting.DocComment.MissingShort">
         <exclude-pattern>*.Test\.php</exclude-pattern>
         <exclude-pattern>*.TestCase\.php</exclude-pattern>
         <exclude-pattern>*.test</exclude-pattern>

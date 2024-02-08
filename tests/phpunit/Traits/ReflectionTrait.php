@@ -1,6 +1,6 @@
 <?php
 
-namespace Drevops\Installer\Tests\Traits;
+namespace DrevOps\Installer\Tests\Traits;
 
 /**
  * Trait ReflectionTrait.
