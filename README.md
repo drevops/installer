@@ -26,7 +26,9 @@
 ## Installation
 
 Download the latest version of the installer:
-`curl -SsL https://install.drevops.com > install.php`
+```bash
+curl -SsL https://install.drevops.com > install.php
+```
 
 ## Maintenance
 
