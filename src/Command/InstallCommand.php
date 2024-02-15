@@ -374,11 +374,23 @@ class InstallCommand extends Command {
     $type = $this->getAnswer('database_download_source');
     static::fileReplaceContent('/DREVOPS_DB_DOWNLOAD_SOURCE=.*/', 'DREVOPS_DB_DOWNLOAD_SOURCE=' . $type, $dir . '/.env');
 
-    if ($type == 'docker_registry') {
-      $this->removeTokenWithContent('!DREVOPS_DB_DOWNLOAD_SOURCE_DOCKER_REGISTRY', $dir);
-    }
-    else {
-      $this->removeTokenWithContent('DREVOPS_DB_DOWNLOAD_SOURCE_DOCKER_REGISTRY', $dir);
+    $types = [
+      'curl',
+      'ftp',
+      'acquia',
+      'lagoon',
+      'docker_registry',
+      'none',
+    ];
+
+    foreach ($types as $t) {
+      $token = 'DREVOPS_DB_DOWNLOAD_SOURCE_' . strtoupper($t);
+      if ($t == $type) {
+        $this->removeTokenWithContent('!' . $token, $dir);
+      }
+      else {
+        $this->removeTokenWithContent($token, $dir);
+      }
     }
   }
 
@@ -1439,10 +1451,10 @@ class InstallCommand extends Command {
 
     return match ($value) {
       'f', 'ftp' => 'ftp',
-        'a', 'acquia' => 'acquia',
-        'i', 'd', 'image', 'docker', 'docker_image', 'docker_registry' => 'docker_registry',
-        'c', 'curl' => 'curl',
-        default => $this->getDefaultValueDatabaseDownloadSource(),
+      'a', 'acquia' => 'acquia',
+      'i', 'd', 'image', 'docker', 'docker_image', 'docker_registry' => 'docker_registry',
+      'c', 'curl' => 'curl',
+      default => $this->getDefaultValueDatabaseDownloadSource(),
     };
   }
 
@@ -1451,8 +1463,8 @@ class InstallCommand extends Command {
 
     return match ($value) {
       'i', 'd', 'image', 'docker_image', 'docker' => 'docker_image',
-        'f', 'file' => 'file',
-        default => $this->getDefaultValueDatabaseStoreType(),
+      'f', 'file' => 'file',
+      default => $this->getDefaultValueDatabaseStoreType(),
     };
   }
 
@@ -2228,8 +2240,8 @@ EOF;
       return strlen($parts[0]) > $length ? substr($parts[0], 0, $length) : $value;
     }
 
-    $value = implode('', array_map(static function ($word) : string {
-        return substr($word, 0, 1);
+    $value = implode('', array_map(static function ($word): string {
+      return substr($word, 0, 1);
     }, $parts));
 
     return substr($value, 0, $length);
