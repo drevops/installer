@@ -2014,11 +2014,10 @@ EOF;
 
   protected static function internalPaths(): array {
     return [
-      '/.drevops/installer/install',
       '/LICENSE',
+      '/CODE_OF_CONDUCT.md',
       '/.drevops/docs',
       '/.drevops/tests',
-      '/scripts/drevops/utils',
     ];
   }
 
