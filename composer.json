@@ -1,7 +1,7 @@
 {
     "name": "drevops/installer",
     "type": "library",
-    "description": "Provides DrevOps installer functionality.",
+    "description": "Installer for DrevOps scaffold.",
     "license": "GPL-2.0-or-later",
     "authors": [
         {
@@ -11,10 +11,10 @@
             "role": "Maintainer"
         }
     ],
-    "homepage": "https://github.com/drevops/drevops",
+    "homepage": "https://github.com/drevops/installer",
     "support": {
-        "issues": "https://github.com/drevops/drevops/issues",
-        "source": "https://github.com/drevops/drevops"
+        "issues": "https://github.com/drevops/installer/issues",
+        "source": "https://github.com/drevops/installer"
     },
     "require": {
         "php": ">=8.1",
@@ -45,6 +45,7 @@
         ]
     },
     "config": {
+        "sort-packages": true,
         "allow-plugins": {
             "bamarni/composer-bin-plugin": true,
             "dealerdirect/phpcodesniffer-composer-installer": true
@@ -54,7 +55,7 @@
         "lint": [
             "phpcs",
             "phpstan",
-            "rector --dry-run"
+            "rector --clear-cache --dry-run"
         ],
         "lint-fix": [
             "rector --clear-cache",
