@@ -575,10 +575,16 @@ class InstallCommand extends Command {
 
   protected function processDrevopsInternal(string $dir) {
     // Remove DrevOps internal files.
-    static::rmdirRecursive($dir . '/.drevops/docs');
-    static::rmdirRecursive($dir . '/.drevops/tests');
-    static::rmdirRecursive($dir . '/scripts/drevops/utils');
+    static::rmdirRecursive($dir . DIRECTORY_SEPARATOR . '.drevops');
+
+    if (file_exists($dir . DIRECTORY_SEPARATOR . 'README.dist.md')) {
+      rename($dir . DIRECTORY_SEPARATOR . 'README.dist.md', $dir . DIRECTORY_SEPARATOR . 'README.md');
+    }
+
+    // Remove DrevOps funding information.
     @unlink($dir . '/.github/FUNDING.yml');
+
+    // Remove DrevOps internal GHAs.
     foreach (glob($dir . '/.github/workflows/drevops-*.yml') as $file) {
       @unlink($file);
     }
