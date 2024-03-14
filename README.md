@@ -17,14 +17,8 @@
 
 </div>
 
----
-
-<p align="center"> Installer for DrevOps scaffold project.
-    <br>
-</p>
-
 > [!IMPORTANT]
-> We are working on the v2 on the installer in
+> We are working on the `v2` on the installer in
 > the [`2.x`](https://github.com/drevops/installer/tree/2.x) branch.
 
 ## Installation
@@ -42,3 +36,7 @@ rm -r install.php
     composer install
     composer lint
     composer test
+
+### Releasing
+
+The installer is packaged as a PHAR and deployed to https://install.drevops.com/ upon each GitHub release.
