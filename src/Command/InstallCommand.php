@@ -790,7 +790,7 @@ class InstallCommand extends Command {
       $proceed = self::ANSWER_NO;
     }
 
-    return strtolower((string) $proceed) == self::ANSWER_YES;
+    return strtolower((string) $proceed) === self::ANSWER_YES;
   }
 
   protected function askForAnswer($name, $question) {
@@ -907,7 +907,7 @@ class InstallCommand extends Command {
     else {
       // On Windows, default to no ANSI, except in ANSICON and ConEmu.
       // Everywhere else, default to ANSI if stdout is a terminal.
-      $is_ansi = (DIRECTORY_SEPARATOR == '\\')
+      $is_ansi = (DIRECTORY_SEPARATOR === '\\')
         ? (FALSE !== getenv('ANSICON') || 'ON' === getenv('ConEmuANSI'))
         : (function_exists('posix_isatty') && posix_isatty(1));
       $this->setConfig('ANSI', $is_ansi);
@@ -1429,7 +1429,7 @@ class InstallCommand extends Command {
 
   protected function normaliseAnswerProfile($value): string {
     $profile = static::toMachineName($value);
-    if (empty($profile) || strtolower($profile) == self::ANSWER_NO) {
+    if (empty($profile) || strtolower($profile) === self::ANSWER_NO) {
       $profile = 'standard';
     }
 
@@ -1449,7 +1449,7 @@ class InstallCommand extends Command {
   }
 
   protected function normaliseAnswerProvisionUseProfile($value): string {
-    return strtolower((string) $value) != self::ANSWER_YES ? self::ANSWER_NO : self::ANSWER_YES;
+    return strtolower((string) $value) !== self::ANSWER_YES ? self::ANSWER_NO : self::ANSWER_YES;
   }
 
   protected function normaliseAnswerDatabaseDownloadSource($value): string {
@@ -1481,7 +1481,7 @@ class InstallCommand extends Command {
   }
 
   protected function normaliseAnswerOverrideExistingDb($value): string {
-    return strtolower((string) $value) != self::ANSWER_YES ? self::ANSWER_NO : self::ANSWER_YES;
+    return strtolower((string) $value) !== self::ANSWER_YES ? self::ANSWER_NO : self::ANSWER_YES;
   }
 
   protected function normaliseAnswerDeployType($value): ?string {
@@ -1530,27 +1530,27 @@ class InstallCommand extends Command {
   }
 
   protected function normaliseAnswerPreserveAcquia($value): string {
-    return strtolower((string) $value) != self::ANSWER_YES ? self::ANSWER_NO : self::ANSWER_YES;
+    return strtolower((string) $value) !== self::ANSWER_YES ? self::ANSWER_NO : self::ANSWER_YES;
   }
 
   protected function normaliseAnswerPreserveLagoon($value): string {
-    return strtolower((string) $value) != self::ANSWER_YES ? self::ANSWER_NO : self::ANSWER_YES;
+    return strtolower((string) $value) !== self::ANSWER_YES ? self::ANSWER_NO : self::ANSWER_YES;
   }
 
   protected function normaliseAnswerPreserveFtp($value): string {
-    return strtolower((string) $value) != self::ANSWER_YES ? self::ANSWER_NO : self::ANSWER_YES;
+    return strtolower((string) $value) !== self::ANSWER_YES ? self::ANSWER_NO : self::ANSWER_YES;
   }
 
   protected function normaliseAnswerPreserveRenovatebot($value): string {
-    return strtolower((string) $value) != self::ANSWER_YES ? self::ANSWER_NO : self::ANSWER_YES;
+    return strtolower((string) $value) !== self::ANSWER_YES ? self::ANSWER_NO : self::ANSWER_YES;
   }
 
   protected function normaliseAnswerPreserveDocComments($value): string {
-    return strtolower((string) $value) != self::ANSWER_YES ? self::ANSWER_NO : self::ANSWER_YES;
+    return strtolower((string) $value) !== self::ANSWER_YES ? self::ANSWER_NO : self::ANSWER_YES;
   }
 
   protected function normaliseAnswerPreserveDrevopsInfo($value): string {
-    return strtolower((string) $value) != self::ANSWER_YES ? self::ANSWER_NO : self::ANSWER_YES;
+    return strtolower((string) $value) !== self::ANSWER_YES ? self::ANSWER_NO : self::ANSWER_YES;
   }
 
   /**
@@ -1816,7 +1816,7 @@ EOF;
   }
 
   protected function formatEnabled($value): string {
-    return $value && strtolower((string) $value) != 'n' ? 'Enabled' : 'Disabled';
+    return $value && strtolower((string) $value) !== 'n' ? 'Enabled' : 'Disabled';
   }
 
   protected function formatYesNo($value): string {
@@ -2062,10 +2062,10 @@ EOF;
     }
     $items = glob($directory . DIRECTORY_SEPARATOR . '{,.}*', GLOB_MARK | GLOB_BRACE);
     foreach ($items as $item) {
-      if (basename($item) == '.' || basename($item) == '..') {
+      if (basename($item) === '.' || basename($item) === '..') {
         continue;
       }
-      if (substr($item, -1) == DIRECTORY_SEPARATOR) {
+      if (substr($item, -1) === DIRECTORY_SEPARATOR) {
         if (!$options['traverseSymlinks'] && is_link(rtrim($item, DIRECTORY_SEPARATOR))) {
           unlink(rtrim($item, DIRECTORY_SEPARATOR));
         }
@@ -2172,7 +2172,7 @@ EOF;
   protected static function getenvOrDefault($name, $default = NULL) {
     $vars = getenv();
 
-    if (!isset($vars[$name]) || $vars[$name] == '') {
+    if (!isset($vars[$name]) || $vars[$name] === '') {
       return $default;
     }
 
