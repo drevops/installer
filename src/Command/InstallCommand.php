@@ -565,7 +565,9 @@ class InstallCommand extends Command {
 
   protected function processPreserveScaffoldInfo(string $dir) {
     if ($this->getAnswer('preserve_scaffold_info') == self::ANSWER_NO) {
-      // Remove code required for DrevOps maintenance.
+      // Remove code required for Scaffold maintenance.
+      $this->removeTokenWithContent('SCAFFOLD_DEV', $dir);
+      // @todo Remove handling of the old DrevOps dev token in year 2025.
       $this->removeTokenWithContent('DREVOPS_DEV', $dir);
 
       // Remove all other comments.
