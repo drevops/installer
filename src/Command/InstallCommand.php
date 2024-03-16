@@ -175,8 +175,8 @@ class InstallCommand extends Command {
       'string_tokens',
       'preserve_doc_comments',
       'demo_mode',
-      'preserve_drevops_info',
-      'drevops_internal',
+      'preserve_scaffold_info',
+      'scaffold_internal',
       'enable_commented_code',
     ];
 
@@ -480,7 +480,7 @@ class InstallCommand extends Command {
     $module_prefix_camel_cased = static::toCamelCase($this->getAnswer('module_prefix'), TRUE);
     $module_prefix_uppercase = strtoupper((string) $module_prefix_camel_cased);
     $theme_camel_cased = static::toCamelCase($this->getAnswer('theme'), TRUE);
-    $drevops_version_urlencoded = str_replace('-', '--', (string) $this->getConfig('DREVOPS_VERSION'));
+    $scaffold_version_urlencoded = str_replace('-', '--', (string) $this->getConfig('DREVOPS_VERSION'));
 
     $webroot = $this->getAnswer('webroot');
 
@@ -510,7 +510,7 @@ class InstallCommand extends Command {
     static::replaceStringFilename('your_org',          $this->getAnswer('org_machine_name'),        $dir);
     static::replaceStringFilename('your_site',         $this->getAnswer('machine_name'),            $dir);
 
-    static::dirReplaceContent('DREVOPS_VERSION_URLENCODED', $drevops_version_urlencoded,             $dir);
+    static::dirReplaceContent('DREVOPS_VERSION_URLENCODED', $scaffold_version_urlencoded,             $dir);
     static::dirReplaceContent('DREVOPS_VERSION',            $this->getConfig('DREVOPS_VERSION'),   $dir);
     // @formatter:on
     // phpcs:enable Generic.Functions.FunctionCallArgumentSpacing.TooMuchSpaceAfterComma
@@ -563,8 +563,8 @@ class InstallCommand extends Command {
     }
   }
 
-  protected function processPreserveDrevopsInfo(string $dir) {
-    if ($this->getAnswer('preserve_drevops_info') == self::ANSWER_NO) {
+  protected function processPreserveScaffoldInfo(string $dir) {
+    if ($this->getAnswer('preserve_scaffold_info') == self::ANSWER_NO) {
       // Remove code required for DrevOps maintenance.
       $this->removeTokenWithContent('DREVOPS_DEV', $dir);
 
@@ -573,20 +573,20 @@ class InstallCommand extends Command {
     }
   }
 
-  protected function processDrevopsInternal(string $dir) {
+  protected function processScaffoldInternal(string $dir) {
     if (file_exists($dir . DIRECTORY_SEPARATOR . 'README.dist.md')) {
       rename($dir . DIRECTORY_SEPARATOR . 'README.dist.md', $dir . DIRECTORY_SEPARATOR . 'README.md');
     }
 
-    // Remove DrevOps internal files.
-    static::rmdirRecursive($dir . DIRECTORY_SEPARATOR . '.drevops');
+    // Remove Scaffold internal files.
+    static::rmdirRecursive($dir . DIRECTORY_SEPARATOR . '.scaffold');
 
     @unlink($dir . '/.github/FUNDING.yml');
     @unlink($dir . 'LICENSE');
     @unlink($dir . 'CODE_OF_CONDUCT.md');
 
     // Remove DrevOps internal GHAs.
-    foreach (glob($dir . '/.github/workflows/drevops-*.yml') as $file) {
+    foreach (glob($dir . '/.github/workflows/scaffold-*.yml') as $file) {
       @unlink($file);
     }
 
@@ -651,13 +651,13 @@ class InstallCommand extends Command {
   protected function downloadRemote() {
     $dst = $this->getConfig('DREVOPS_INSTALL_TMP_DIR');
     $org = 'drevops';
-    $project = 'drevops';
+    $project = 'scaffold';
     $ref = $this->getConfig('DREVOPS_INSTALL_COMMIT');
     $release_prefix = $this->getConfig('DREVOPS_VERSION');
 
     if ($ref == 'HEAD') {
       $release_prefix = $release_prefix == 'develop' ? NULL : $release_prefix;
-      $ref = $this->findLatestDrevopsRelease($org, $project, $release_prefix);
+      $ref = $this->findLatestScaffoldRelease($org, $project, $release_prefix);
       $this->setConfig('DREVOPS_VERSION', $ref);
     }
 
@@ -674,7 +674,7 @@ class InstallCommand extends Command {
     $this->status('Done', self::INSTALLER_STATUS_SUCCESS);
   }
 
-  protected function findLatestDrevopsRelease($org, $project, $release_prefix) {
+  protected function findLatestScaffoldRelease($org, $project, $release_prefix) {
     $release_url = sprintf('https://api.github.com/repos/%s/%s/releases', $org, $project);
     $release_contents = file_get_contents($release_url, FALSE, stream_context_create([
       'http' => ['method' => 'GET', 'header' => ['User-Agent: PHP']],
@@ -769,7 +769,7 @@ class InstallCommand extends Command {
     $this->askForAnswer('preserve_renovatebot', 'Do you want to keep RenovateBot integration?');
 
     $this->askForAnswer('preserve_doc_comments', 'Do you want to keep detailed documentation in comments?');
-    $this->askForAnswer('preserve_drevops_info', 'Do you want to keep all DrevOps information?');
+    $this->askForAnswer('preserve_scaffold_info', 'Do you want to keep all DrevOps information?');
 
     $this->printSummary();
 
@@ -1069,7 +1069,7 @@ class InstallCommand extends Command {
     return self::ANSWER_YES;
   }
 
-  protected function getDefaultValuePreserveDrevopsInfo(): string {
+  protected function getDefaultValuePreserveScaffoldInfo(): string {
     return self::ANSWER_NO;
   }
 
@@ -1343,7 +1343,7 @@ class InstallCommand extends Command {
     return static::fileContains('Ahoy configuration file', $file) ? self::ANSWER_YES : self::ANSWER_NO;
   }
 
-  protected function discoverValuePreserveDrevopsInfo(): ?string {
+  protected function discoverValuePreserveScaffoldInfo(): ?string {
     $file = $this->getDstDir() . '/.ahoy.yml';
     if (!is_readable($file)) {
       return NULL;
@@ -1550,7 +1550,7 @@ class InstallCommand extends Command {
     return strtolower((string) $value) !== self::ANSWER_YES ? self::ANSWER_NO : self::ANSWER_YES;
   }
 
-  protected function normaliseAnswerPreserveDrevopsInfo($value): string {
+  protected function normaliseAnswerPreserveScaffoldInfo($value): string {
     return strtolower((string) $value) !== self::ANSWER_YES ? self::ANSWER_NO : self::ANSWER_YES;
   }
 
@@ -1659,7 +1659,7 @@ EOF;
     $values['Lagoon integration'] = $this->formatEnabled($this->getAnswer('preserve_lagoon'));
     $values['RenovateBot integration'] = $this->formatEnabled($this->getAnswer('preserve_renovatebot'));
     $values['Preserve docs in comments'] = $this->formatYesNo($this->getAnswer('preserve_doc_comments'));
-    $values['Preserve DrevOps comments'] = $this->formatYesNo($this->getAnswer('preserve_drevops_info'));
+    $values['Preserve DrevOps comments'] = $this->formatYesNo($this->getAnswer('preserve_scaffold_info'));
 
     $content = $this->formatValuesList($values, '', 80 - 2 - 2 * 2);
 
@@ -2016,8 +2016,8 @@ EOF;
     return [
       '/LICENSE',
       '/CODE_OF_CONDUCT.md',
-      '/.drevops/docs',
-      '/.drevops/tests',
+      '/.scaffold/docs',
+      '/.scaffold/tests',
     ];
   }
 
