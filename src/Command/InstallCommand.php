@@ -534,6 +534,8 @@ class InstallCommand extends Command {
         $download_source = $this->getAnswer('database_download_source');
         $db_file = static::getenvOrDefault('DREVOPS_DB_DIR', './.data') . DIRECTORY_SEPARATOR . static::getenvOrDefault('DREVOPS_DB_FILE', 'db.sql');
         $has_comment = static::fileContains('to allow to demonstrate how Scaffold works without', $this->getDstDir() . '/.env');
+        // @todo Remove handling of the old DrevOps demo comment in year 2025.
+        $has_comment = $has_comment || static::fileContains('to allow to demonstrate how DrevOps works without', $this->getDstDir() . '/.env');
 
         // Enable DrevOps demo mode if download source is file AND
         // there is no downloaded file present OR if there is a demo comment in
