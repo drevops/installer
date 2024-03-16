@@ -1583,14 +1583,14 @@ EOF;
 
     $content = '';
     if ($commit == 'HEAD') {
-      $content .= 'This will install the latest version of DrevOps into your project.' . PHP_EOL;
+      $content .= 'This will install the latest version of DrevOps scaffold into your project.' . PHP_EOL;
     }
     else {
-      $content .= sprintf('This will install DrevOps into your project at commit "%s".', $commit) . PHP_EOL;
+      $content .= sprintf('This will install DrevOps scaffold into your project at commit "%s".', $commit) . PHP_EOL;
     }
     $content .= PHP_EOL;
     if ($this->isInstalled()) {
-      $content .= 'It looks like DrevOps is already installed into this project.' . PHP_EOL;
+      $content .= 'It looks like DrevOps scaffold is already installed into this project.' . PHP_EOL;
       $content .= PHP_EOL;
     }
     $content .= 'Please answer the questions below to install configuration relevant to your site.' . PHP_EOL;
@@ -1608,14 +1608,14 @@ EOF;
 
     $content = '';
     if ($commit == 'HEAD') {
-      $content .= 'This will install the latest version of DrevOps into your project.' . PHP_EOL;
+      $content .= 'This will install the latest version of DrevOps scaffold into your project.' . PHP_EOL;
     }
     else {
-      $content .= sprintf('This will install DrevOps into your project at commit "%s".', $commit) . PHP_EOL;
+      $content .= sprintf('This will install DrevOps scaffold into your project at commit "%s".', $commit) . PHP_EOL;
     }
     $content .= PHP_EOL;
     if ($this->isInstalled()) {
-      $content .= 'It looks like DrevOps is already installed into this project.' . PHP_EOL;
+      $content .= 'It looks like DrevOps scaffold is already installed into this project.' . PHP_EOL;
       $content .= PHP_EOL;
     }
     $content .= 'DrevOps installer will try to discover the settings from the environment and will install configuration relevant to your site.' . PHP_EOL;
