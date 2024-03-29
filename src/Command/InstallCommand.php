@@ -481,7 +481,10 @@ class InstallCommand extends Command {
     $module_prefix_uppercase = strtoupper((string) $module_prefix_camel_cased);
     $theme_camel_cased = static::toCamelCase($this->getAnswer('theme'), TRUE);
     $scaffold_version_urlencoded = str_replace('-', '--', (string) $this->getConfig('DREVOPS_VERSION'));
-
+    $url = $this->getAnswer('url');
+    $host = parse_url((string) $url, PHP_URL_HOST);
+    $domain = ($host) ? $host : $url;
+    $domain_non_www = str_starts_with((string) $domain, "www.") ? substr((string) $domain, 4) : $domain;
     $webroot = $this->getAnswer('webroot');
 
     // @formatter:off
@@ -491,16 +494,8 @@ class InstallCommand extends Command {
     static::dirReplaceContent('YourSiteTheme',         $theme_camel_cased,                           $dir);
     static::dirReplaceContent('your_org',              $this->getAnswer('org_machine_name'),        $dir);
     static::dirReplaceContent('YOURORG',               $this->getAnswer('org'),                     $dir);
-    $url = $this->getAnswer('url');
-    $domain = parse_url((string) $url, PHP_URL_HOST);
-    if (!$domain) {
-      $domain = $url;
-    }
-    $domain_non_www = str_starts_with((string) $domain, "www.") ? substr((string) $domain, 4) : $domain;
-
-    static::dirReplaceContent('www.your-site-url.example', $domain,                     $dir);
-    static::dirReplaceContent('your-site-url.example', $domain_non_www,                     $dir);
-
+    static::dirReplaceContent('www.your-site-url.example',  $domain,                    $dir);
+    static::dirReplaceContent('your-site-url.example',      $domain_non_www,            $dir);
     static::dirReplaceContent('ys_core',               $this->getAnswer('module_prefix') . '_core', $dir . sprintf('/%s/modules/custom', $webroot));
     static::dirReplaceContent('ys_core',               $this->getAnswer('module_prefix') . '_core', $dir . sprintf('/%s/themes/custom', $webroot));
     static::dirReplaceContent('ys_core',               $this->getAnswer('module_prefix') . '_core', $dir . '/scripts/custom');
