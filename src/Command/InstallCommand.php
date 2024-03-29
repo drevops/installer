@@ -493,6 +493,9 @@ class InstallCommand extends Command {
     static::dirReplaceContent('YOURORG',               $this->getAnswer('org'),                     $dir);
     $url = $this->getAnswer('url');
     $domain = parse_url($url, PHP_URL_HOST);
+    if (is_null($domain)) {
+      $domain = $url;
+    }
     $domain_non_www = $domain;
     if (str_starts_with($url, "www.")) {
       $domain_non_www = substr($url, 4);
