@@ -491,7 +491,15 @@ class InstallCommand extends Command {
     static::dirReplaceContent('YourSiteTheme',         $theme_camel_cased,                           $dir);
     static::dirReplaceContent('your_org',              $this->getAnswer('org_machine_name'),        $dir);
     static::dirReplaceContent('YOURORG',               $this->getAnswer('org'),                     $dir);
-    static::dirReplaceContent('your-site-url.example', $this->getAnswer('url'),                     $dir);
+    $url = $this->getAnswer('url');
+    $domain = parse_url($url, PHP_URL_HOST);
+    $domain_non_www = $domain;
+    if (str_starts_with($url, "www.")) {
+      $domain_non_www = substr($url, 4);
+    }
+    static::dirReplaceContent('www.your-site-url.example', $domain,                     $dir);
+    static::dirReplaceContent('your-site-url.example', $domain_non_www,                     $dir);
+
     static::dirReplaceContent('ys_core',               $this->getAnswer('module_prefix') . '_core', $dir . sprintf('/%s/modules/custom', $webroot));
     static::dirReplaceContent('ys_core',               $this->getAnswer('module_prefix') . '_core', $dir . sprintf('/%s/themes/custom', $webroot));
     static::dirReplaceContent('ys_core',               $this->getAnswer('module_prefix') . '_core', $dir . '/scripts/custom');
@@ -1447,9 +1455,6 @@ class InstallCommand extends Command {
 
   protected function normaliseAnswerUrl($url): string|array {
     $url = trim((string) $url);
-    if (str_starts_with($url, "www.")) {
-      $url = substr($url, 4);
-    }
     return str_replace([' ', '_'], '-', $url);
   }
 
