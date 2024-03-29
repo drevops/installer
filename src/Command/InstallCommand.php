@@ -1446,7 +1446,11 @@ class InstallCommand extends Command {
   }
 
   protected function normaliseAnswerUrl($url): string|array {
-    return str_replace([' ', '_'], '-', (string) $url);
+    $url = trim((string) $url);
+    if (str_starts_with($url, "www.")) {
+      $url = substr($url, 4);
+    }
+    return str_replace([' ', '_'], '-', $url);
   }
 
   protected function normaliseAnswerWebroot($value): string {
