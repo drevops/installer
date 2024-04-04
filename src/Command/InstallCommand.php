@@ -610,16 +610,7 @@ class InstallCommand extends Command {
 
   protected function processWebroot(string $dir) {
     $new_name = $this->getAnswer('webroot', 'web');
-
-    if ($new_name != 'web') {
-      static::dirReplaceContent('web/', $new_name . '/', $dir);
-      static::dirReplaceContent('web\/', $new_name . '\/', $dir);
-      static::dirReplaceContent(': web', ': ' . $new_name, $dir);
-      static::dirReplaceContent('=web', '=' . $new_name, $dir);
-      static::dirReplaceContent('!web', '!' . $new_name, $dir);
-      static::dirReplaceContent('/\/web\//', '/' . $new_name . '/', $dir);
-      rename($dir . DIRECTORY_SEPARATOR . 'web', $dir . DIRECTORY_SEPARATOR . $new_name);
-    }
+    static::dirReplaceContent('[your-webroot]', $new_name, $dir);
   }
 
   /**
