@@ -422,6 +422,7 @@ class InstallCommand extends Command {
 
       if (!str_contains((string) $type, 'artifact')) {
         @unlink($dir . '/.gitignore.deployment');
+        @unlink($dir . '/.gitignore.artifact');
       }
 
       $this->removeTokenWithContent('!DEPLOYMENT', $dir);
@@ -429,6 +430,7 @@ class InstallCommand extends Command {
     else {
       @unlink($dir . '/docs/deployment.md');
       @unlink($dir . '/.gitignore.deployment');
+      @unlink($dir . '/.gitignore.artifact');
       $this->removeTokenWithContent('DEPLOYMENT', $dir);
     }
   }
@@ -450,7 +452,7 @@ class InstallCommand extends Command {
     else {
       @unlink($dir . '/drush/sites/lagoon.site.yml');
       @unlink($dir . '/.lagoon.yml');
-      @unlink($dir . '/.github/workflows/dispatch-webhook-lagoon.yml');
+      @unlink($dir . '/.github/workflows/close-pull-request.yml');
       $this->removeTokenWithContent('LAGOON', $dir);
     }
   }
