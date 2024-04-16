@@ -441,6 +441,8 @@ class InstallCommand extends Command {
     }
     else {
       static::rmdirRecursive($dir . '/hooks');
+      $webroot = $this->getAnswer('webroot');
+      @unlink(sprintf('%s/%s/sites/default/includes/providers/settings.acquia.php', $dir, $webroot));
       $this->removeTokenWithContent('ACQUIA', $dir);
     }
   }
@@ -453,6 +455,8 @@ class InstallCommand extends Command {
       @unlink($dir . '/drush/sites/lagoon.site.yml');
       @unlink($dir . '/.lagoon.yml');
       @unlink($dir . '/.github/workflows/close-pull-request.yml');
+      $webroot = $this->getAnswer('webroot');
+      @unlink(sprintf('%s/%s/sites/default/includes/providers/settings.lagoon.php', $dir, $webroot));
       $this->removeTokenWithContent('LAGOON', $dir);
     }
   }
@@ -1453,6 +1457,7 @@ class InstallCommand extends Command {
 
   protected function normaliseAnswerUrl($url): string|array {
     $url = trim((string) $url);
+
     return str_replace([' ', '_'], '-', $url);
   }
 
