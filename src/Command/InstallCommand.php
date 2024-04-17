@@ -704,6 +704,8 @@ class InstallCommand extends Command {
         return $record['tag_name'];
       }
     }
+
+    return NULL;
   }
 
   /**
@@ -1877,7 +1879,7 @@ EOF;
     return @preg_match($str, '') !== FALSE;
   }
 
-  protected static function fileReplaceContent($needle, $replacement, $filename) {
+  protected static function fileReplaceContent($needle, $replacement, $filename): ?bool {
     if (!is_readable($filename) || static::fileIsExcludedFromProcessing($filename)) {
       return FALSE;
     }
@@ -1893,6 +1895,8 @@ EOF;
     if ($replaced != $content) {
       file_put_contents($filename, $replaced);
     }
+
+    return NULL;
   }
 
   protected static function dirReplaceContent($needle, $replacement, string $dir) {
