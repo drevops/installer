@@ -396,13 +396,13 @@ class InstallCommand extends Command {
 
   protected function processDatabaseImage(string $dir) {
     $image = $this->getAnswer('database_image');
-    static::fileReplaceContent('/DREVOPS_DB_DOCKER_IMAGE=.*/', 'DREVOPS_DB_DOCKER_IMAGE=' . $image, $dir . '/.env');
+    static::fileReplaceContent('/DREVOPS_DB_IMAGE=.*/', 'DREVOPS_DB_IMAGE=' . $image, $dir . '/.env');
 
     if ($image) {
-      $this->removeTokenWithContent('!DREVOPS_DB_DOCKER_IMAGE', $dir);
+      $this->removeTokenWithContent('!DREVOPS_DB_IMAGE', $dir);
     }
     else {
-      $this->removeTokenWithContent('DREVOPS_DB_DOCKER_IMAGE', $dir);
+      $this->removeTokenWithContent('DREVOPS_DB_IMAGE', $dir);
     }
   }
 
@@ -1289,7 +1289,7 @@ class InstallCommand extends Command {
   }
 
   protected function discoverValueDatabaseImage() {
-    return $this->getValueFromDstDotenv('DREVOPS_DB_DOCKER_IMAGE');
+    return $this->getValueFromDstDotenv('DREVOPS_DB_IMAGE');
   }
 
   protected function discoverValueOverrideExistingDb(): string {
