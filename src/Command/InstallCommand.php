@@ -379,7 +379,7 @@ class InstallCommand extends Command {
       'ftp',
       'acquia',
       'lagoon',
-      'docker_registry',
+      'container_registry',
       'none',
     ];
 
@@ -550,7 +550,7 @@ class InstallCommand extends Command {
         // Enable DrevOps demo mode if download source is file AND
         // there is no downloaded file present OR if there is a demo comment in
         // destination .env file.
-        if ($download_source != 'docker_registry') {
+        if ($download_source != 'container_registry') {
           if ($has_comment || !file_exists($db_file)) {
             $this->setConfig('DREVOPS_INSTALL_DEMO', TRUE);
           }
@@ -558,7 +558,7 @@ class InstallCommand extends Command {
             $this->setConfig('DREVOPS_INSTALL_DEMO', FALSE);
           }
         }
-        elseif ($has_comment || $download_source == 'docker_registry') {
+        elseif ($has_comment || $download_source == 'container_registry') {
           $this->setConfig('DREVOPS_INSTALL_DEMO', TRUE);
         }
         else {
@@ -744,7 +744,7 @@ class InstallCommand extends Command {
     else {
       $this->askForAnswer('database_download_source', "Where does the database dump come from into every environment:\n  - [u]rl\n  - [f]tp\n  - [a]cquia backup\n  - [d]ocker registry?");
 
-      if ($this->getAnswer('database_download_source') != 'docker_registry') {
+      if ($this->getAnswer('database_download_source') != 'container_registry') {
         // Note that "database_store_type" is a pseudo-answer - it is only used
         // to improve UX and is not exposed as a variable (although has default,
         // discovery and normalisation callbacks).
@@ -755,7 +755,7 @@ class InstallCommand extends Command {
         $this->setAnswer('database_image', '');
       }
       else {
-        $this->askForAnswer('database_image',         '  What is your database Docker image name and a tag (e.g. drevops/drevops-mariadb-drupal-data:latest)?');
+        $this->askForAnswer('database_image',         '  What is your database image name and a tag (e.g. drevops/drevops-mariadb-drupal-data:latest)?');
       }
     }
     // @formatter:on
@@ -1285,7 +1285,7 @@ class InstallCommand extends Command {
   }
 
   protected function discoverValueDatabaseStoreType(): string {
-    return $this->discoverValueDatabaseImage() ? 'docker_image' : 'file';
+    return $this->discoverValueDatabaseImage() ? 'container_image' : 'file';
   }
 
   protected function discoverValueDatabaseImage() {
@@ -1477,7 +1477,7 @@ class InstallCommand extends Command {
     return match ($value) {
       'f', 'ftp' => 'ftp',
       'a', 'acquia' => 'acquia',
-      'i', 'd', 'image', 'docker', 'docker_image', 'docker_registry' => 'docker_registry',
+      'i', 'image', 'container_image', 'container_registry' => 'container_registry',
       'c', 'curl' => 'curl',
       default => $this->getDefaultValueDatabaseDownloadSource(),
     };
@@ -1487,7 +1487,7 @@ class InstallCommand extends Command {
     $value = strtolower((string) $value);
 
     return match ($value) {
-      'i', 'd', 'image', 'docker_image', 'docker' => 'docker_image',
+      'i', 'image', 'container_image', => 'container_image',
       'f', 'file' => 'file',
       default => $this->getDefaultValueDatabaseStoreType(),
     };
@@ -1522,9 +1522,9 @@ class InstallCommand extends Command {
           $normalised[] = 'artifact';
           break;
 
-        case 'd':
-        case 'docker':
-          $normalised[] = 'docker';
+        case 'r':
+        case 'container_registry':
+          $normalised[] = 'container_registry';
           break;
 
         case 'l':
@@ -1665,7 +1665,7 @@ EOF;
 
     $values['Database download source'] = $this->getAnswer('database_download_source');
     $image = $this->getAnswer('database_image');
-    $values['Database store type'] = empty($image) ? 'file' : 'docker_image';
+    $values['Database store type'] = empty($image) ? 'file' : 'container_image';
     if ($image) {
       $values['Database image name'] = $image;
     }
