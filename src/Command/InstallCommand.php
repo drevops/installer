@@ -596,8 +596,10 @@ class InstallCommand extends Command {
     static::rmdirRecursive($dir . DIRECTORY_SEPARATOR . '.scaffold');
 
     @unlink($dir . '/.github/FUNDING.yml');
-    @unlink($dir . 'LICENSE');
     @unlink($dir . 'CODE_OF_CONDUCT.md');
+    @unlink($dir . 'CONTRIBUTING.md');
+    @unlink($dir . 'LICENSE');
+    @unlink($dir . 'SECURITY.md');
 
     // Remove DrevOps internal GHAs.
     foreach (glob($dir . '/.github/workflows/scaffold-*.yml') as $file) {
@@ -2036,6 +2038,9 @@ EOF;
     return [
       '/LICENSE',
       '/CODE_OF_CONDUCT.md',
+      '/CONTRIBUTING.md',
+      '/LICENSE',
+      '/SECURITY.md',
       '/.scaffold/docs',
       '/.scaffold/tests',
     ];
